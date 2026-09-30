@@ -1,0 +1,10 @@
+{
+  "description": "A premium, interactive campaign platform for CUEA Faculty of Law candidates enabling student engagement, transparent manifesto exploration, and real-time sentiment tracking.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

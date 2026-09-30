@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
+  --color-ink: #050608;
+  --color-s1: #0b0d10;
+  --color-s2: #111318;
+  --color-line: rgba(255, 255, 255, 0.09);
+  --color-mute: #9aa1ad;
+  --color-blue: #3b7bff;
+  --color-blue-hi: #6c9bff;
+}
+
+:root {
+  --background: #050608;
+  --foreground: #f4f5f7;
+  --primary: #3b7bff;
+  --border: rgba(255, 255, 255, 0.09);
+  --ring: #6c9bff;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+  background: var(--color-ink);
+}
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection {
+  background: var(--color-blue);
+  color: #fff;
+}
+:focus-visible {
+  outline: 2px solid var(--color-blue-hi);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+* {
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+.mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+}
+.mask > span {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.in .mask > span {
+  transform: none;
+}
+
+.page {
+  animation: pagein 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.ulink {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.35s;
+}
+.ulink:hover {
+  background-size: 100% 1px;
+}
+
+@keyframes drift {
+  0% { transform: translate3d(-8%, 0, 0) scale(1); }
+  50% { transform: translate3d(8%, -6%, 0) scale(1.15); }
+  100% { transform: translate3d(-8%, 0, 0) scale(1); }
+}
+@keyframes pagein {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes scrollcue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal, .mask > span { opacity: 1; transform: none; }
+}
