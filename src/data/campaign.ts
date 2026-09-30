@@ -44,7 +44,7 @@ const img = (id: string) => `https://images.unsplash.com/photo-${id}?w=1200&h=15
 export const candidates: Candidate[] = [
   {
     id: 'president', number: '01', position: 'President', name: 'John Otieno "JOHNTE"', placeholderPhoto: true,
-    photo: img('1707161256359-0919306e0d3c'),
+    photo: img(''),
     officeRole: 'Overall leadership',
     officeText: 'Sets the direction, chairs the leadership team and answers for the campaign’s commitments.',
     intro: null,
@@ -54,7 +54,7 @@ export const candidates: Candidate[] = [
   },
   {
     id: 'vice-president', number: '02', position: 'Vice President', name: 'Tuvia Anne', placeholderPhoto: true,
-    photo: img('1593351799227-75df2026356b'),
+    photo: img(''),
     officeRole: 'Coordination & representation',
     officeText: 'Keeps the team’s work joined up and carries student concerns from every year group to the table.',
     intro: null,
@@ -64,7 +64,7 @@ export const candidates: Candidate[] = [
   },
   {
     id: 'secretary-academic-affairs', number: '03', position: 'Secretary of Academic Affairs', name: 'Nkatha Thaitanga', placeholderPhoto: true,
-    photo: img('1639572490660-eab077b737a4'),
+    photo: img(''),
     officeRole: 'Academic advocacy',
     officeText: 'Speaks for students on teaching, assessment, learning resources and academic processes.',
     intro: null,
