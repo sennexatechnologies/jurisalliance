@@ -49,7 +49,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
               </Link>
             </li>
           ))}
-          {q.trim().length >= 2 && !hits.length && <li className="py-8 text-mute">No results for “{q}”. Try “academic”, “welfare” or “vision”, or <Link className="ulink text-white" to="/faculty-pulse#ask" onClick={onClose}>ask the campaign</Link>.</li>}
+          {q.trim().length >= 2 && !hits.length && <li className="py-8 text-mute">No results for “{q}”. Try “academic”, “welfare” or “vision”, or <Link className="ulink text-white" to="/counsels-room?mode=ask" onClick={onClose}>ask the campaign</Link>.</li>}
           {q.trim().length < 2 && <li className="py-8 text-mute">Type at least two letters. Try “academic”.</li>}
         </ul>
       </div>

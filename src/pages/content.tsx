@@ -9,7 +9,7 @@ export function QuestionsSection({ limit = 4 }: { limit?: number }) {
     <Section id="questions" className="border-t border-line">
       <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <h2 className="display text-[clamp(2rem,5vw,4rem)]"><MaskText text="Questions we’re hearing" /></h2>
-        <Button href="/faculty-pulse#ask" variant="ghost">Ask a question <Arrow /></Button>
+        <Button href="/counsels-room?mode=ask" variant="ghost">Ask a question <Arrow /></Button>
       </div>
       <FAQAccordion items={questions.slice(0, limit)} />
     </Section>
@@ -62,7 +62,7 @@ function Detail({ item, onClose }: { item: ManifestoItem; onClose: () => void })
             {blocks.slice(2).map(([k, v]) => <div key={k}><p className="label text-mute">{k}</p><p className="mt-2 text-white/85">{v}</p></div>)}
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <ShareButtons title={`Manifesto: ${item.title}`} path={`/manifesto?item=${item.id}`} />
-              <Link to="/faculty-pulse#ask" className="label ulink inline-flex gap-2">Ask a question <Arrow /></Link>
+              <Link to="/counsels-room?mode=ask" className="label ulink inline-flex gap-2">Ask a question <Arrow /></Link>
             </div>
           </div>
           <aside className="h-fit rounded-2xl border border-line bg-s2 p-6">
@@ -106,13 +106,13 @@ export function Manifesto() {
                 {list.map((m, i) => <ManifestoCard key={m.id} m={m} i={i} onOpen={() => setParams({ item: m.id }, { replace: true })} />)}
               </div>
             ) : (
-              <Empty title="Nothing matches that." text="Try a different word or clear the filter. If something isn’t covered, tell us." action={<Button href="/faculty-pulse#ask">Ask a question <Arrow /></Button>} />
+              <Empty title="Nothing matches that." text="Try a different word or clear the filter. If something isn’t covered, tell us." action={<Button href="/counsels-room?mode=ask">Ask a question <Arrow /></Button>} />
             )}
           </div>
         </div>
       </section>
       <QuestionsSection />
-      <CTASection title="Something unclear?" text="Ask. Every question gets an answer." actions={[{ label: 'Ask a question', to: '/faculty-pulse#ask' }, { label: 'Meet the candidates', to: '/candidates', ghost: true }]} />
+      <CTASection title="Something unclear?" text="Ask. Every question gets an answer." actions={[{ label: 'Ask a question', to: '/counsels-room?mode=ask' }, { label: 'Meet the candidates', to: '/candidates', ghost: true }]} />
       {active && <Detail item={active} onClose={close} />}
     </>
   );

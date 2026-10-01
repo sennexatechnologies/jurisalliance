@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router';
-import { campaign, events, eventEnd, eventStart, fetchTrends, fmtDate, isPast, news, newsCategories, shareables, timeline, waLink, type Trend } from '../data/campaign';
+import { campaign, events, eventEnd, eventStart, fetchPulseTopics, fmtDate, isPast, news, newsCategories, shareables, timeline, waLink, type PulseTopic } from '../data/campaign';
 import { Breadcrumb, ContactBlock, CTASection, Empty, EventCard, NewsCard, PageHeader, PollChart, ShareButtons, usePoll, Cover } from '../components/kit';
 import { FeedbackForm, IssueForm, VolunteerForm, volunteerAreas } from '../components/forms';
+import { Logo, LogoMark, useMeta } from '../brand';
 import { Arrow, Button, MaskText, Reveal, Section, useScrollProgress } from '../ui';
 import { QuestionsSection } from './content';
 
@@ -21,8 +22,8 @@ const Block = ({ id, eyebrow, title, sub, children }: { id: string; eyebrow: str
 
 export function FacultyPulse() {
   const poll = usePoll();
-  const [trends, setTrends] = useState<Trend[] | null>(null);
-  useEffect(() => { fetchTrends().then(setTrends); }, []);
+  const [trends, setTrends] = useState<PulseTopic[] | null>(null);
+  useEffect(() => { fetchPulseTopics().then(setTrends); }, []);
   const max = Math.max(1, ...(trends ?? []).map((t) => t.count));
   return (
     <>
@@ -31,10 +32,11 @@ export function FacultyPulse() {
         <PollChart data={poll} />
         <div className="grid gap-3 md:grid-cols-2">
           <section className="rounded-3xl border border-line bg-s1 p-6 md:p-10" aria-labelledby="trends">
-            <h2 id="trends" className="label text-white">Issue trends</h2>
+            <h2 id="trends" className="label text-white">Most discussed topics</h2>
             {trends?.length ? (
-              <ul className="mt-6 space-y-4">{trends.map((t) => <li key={t.category}><div className="flex justify-between text-sm"><span>{t.category}</span><span className="tabular-nums text-mute">{t.count}</span></div><div className="mt-2 h-1.5 rounded-full bg-white/10"><div className="h-full rounded-full bg-blue" style={{ width: `${(t.count / max) * 100}%` }} /></div></li>)}</ul>
-            ) : <p className="mt-6 text-mute">Issue trends appear here once submissions have been reviewed. Nothing is estimated.</p>}
+              <ul className="mt-6 space-y-4">{trends.map((t) => <li key={t.category}><div className="flex justify-between text-sm"><span>{t.category}</span><span className="tabular-nums text-mute">{t.percentage}% · {t.count}</span></div><div className="mt-2 h-1.5 rounded-full bg-white/10"><div className="h-full rounded-full bg-blue" style={{ width: `${(t.count / max) * 100}%` }} /></div></li>)}</ul>
+            ) : <div className="mt-6"><p className="label text-blue-hi">Data collection in progress</p><p className="mt-3 text-mute">Topics appear here once Counsel’s Room submissions have been reviewed and counted, grouped by category. Nothing is estimated.</p><Link to="/counsels-room" className="label ulink mt-5 inline-flex gap-2 text-white">Enter the Counsel’s Room <Arrow /></Link></div>}
+            {trends?.length ? <p className="mt-6 text-xs text-mute">Last updated {fmtDate(trends.reduce((a, t) => (t.lastUpdated > a ? t.lastUpdated : a), trends[0].lastUpdated))}. Aggregated from reviewed submissions.</p> : null}
           </section>
           <section className="rounded-3xl border border-line bg-s1 p-6 md:p-10" aria-labelledby="themes">
             <h2 id="themes" className="label text-white">Feedback themes</h2>
@@ -48,22 +50,21 @@ export function FacultyPulse() {
       </div></div>
 
       <Block id="voice" eyebrow="Student voice" title="Your voice matters." sub="A question, a concern, an idea, a suggestion or an issue. Send it and we’ll read it."><FeedbackForm variant="voice" /></Block>
-      <Block id="ask" eyebrow="Ask the campaign" title="Ask the campaign" sub="Got a question about the manifesto, the candidates or the campaign? Ask."><FeedbackForm variant="ask" /></Block>
       <QuestionsSection limit={6} />
-      <Block id="straight" eyebrow="Open conversation" title="Say it straight." sub="No campaign script. Tell us what’s actually happening."><FeedbackForm variant="straight" /></Block>
-      <CTASection title="See something to fix? Help us fix it." actions={[{ label: 'Join the movement', to: '/join' }, { label: 'Read the manifesto', to: '/manifesto', ghost: true }]} />
+      <CTASection title="See something to fix? Help us fix it." actions={[{ label: 'Enter the Counsel’s Room', to: '/counsels-room' }, { label: 'Join the movement', to: '/join', ghost: true }, { label: 'Read the manifesto', to: '/manifesto', ghost: true }]} />
     </>
   );
 }
 
 const joinActions: [string, string, string, string][] = [
   ['Volunteer', 'Give an hour on campus. Small tasks, real difference.', 'Volunteer', '/join?area=General support#volunteer'],
-  ['Join the campaign team', 'Bring a skill: research, design, writing, organising.', 'Apply', '/join?area=Policy#volunteer'],
+  ['Support campaign operations', 'Bring a skill: research, design, writing, organising.', 'Apply', '/join?area=Policy#volunteer'],
   ['Help with outreach', 'Talk to classmates in your year group.', 'Sign up', '/join?area=Outreach#volunteer'],
   ['Support the digital campaign', 'Design, content, social and site support.', 'Sign up', '/join?area=Digital#volunteer'],
   ['Help with events', 'Set up, host and follow up.', 'Sign up', '/join?area=Events#volunteer'],
   ['Share the vision', 'Send one manifesto card to one classmate.', 'Go to sharing', '/newsroom#share'],
-  ['Submit an issue', 'Tell us what should be fixed.', 'Submit', '/join#issue'],
+  ['Share feedback', 'Tell us what you think, anonymously if you prefer.', 'Open the Counsel’s Room', '/counsels-room'],
+  ['Submit questions', 'Put a question to the campaign on the record.', 'Ask', '/counsels-room?mode=ask'],
   ['Attend a campaign event', 'Forums, dialogues and the debate.', 'See events', '/events'],
 ];
 
@@ -73,7 +74,7 @@ export function Join() {
   const pre = volunteerAreas.find((a) => a === area) ?? undefined;
   return (
     <>
-      <PageHeader eyebrow="Join the movement" title="Join the movement" sub="Leadership is bigger than three names." />
+      <PageHeader eyebrow="Join the movement" title="Join the movement" sub="Leadership is bigger than three names."><Logo className="mb-10 w-28 md:w-36" /></PageHeader>
       <div className="px-5 pb-24 md:px-10"><div className="mx-auto max-w-[1280px]">
         <a href={waLink()} target="_blank" rel="noopener noreferrer" className="group mb-3 flex min-h-24 items-center justify-between gap-4 rounded-2xl bg-blue p-6 transition-colors hover:bg-blue-hi md:p-10">
           <span><span className="label text-white/80">Fastest way to reach us</span><span className="display mt-2 block text-3xl md:text-5xl">WhatsApp the campaign</span></span>
@@ -96,7 +97,7 @@ export function Join() {
       <Section id="contact" className="border-t border-line !py-20 md:!py-32">
         <h2 className="display mb-10 text-[clamp(2rem,5vw,4rem)]"><MaskText text="Contact the campaign" /></h2>
         <ContactBlock />
-        <div className="mt-6"><Button href="/faculty-pulse#ask" variant="ghost">Submit a question <Arrow /></Button></div>
+        <div className="mt-6"><Button href="/counsels-room?mode=ask" variant="ghost">Submit a question <Arrow /></Button></div>
       </Section>
     </>
   );
@@ -129,7 +130,7 @@ export function Events() {
   const past = events.filter(isPast).sort((a, b) => +eventStart(b) - +eventStart(a));
   return (
     <>
-      <PageHeader eyebrow="Events" title="Events" sub="Forums, dialogues and campus moments. Dates are added only once confirmed." />
+      <PageHeader eyebrow="Events" title="Events" sub="Forums, dialogues and campus moments. Dates are added only once confirmed."><div className="mb-8 flex items-center gap-3"><LogoMark className="h-10 w-10" /><span className="label text-mute">Juris Leadership Alliance</span></div></PageHeader>
       <div className="px-5 pb-24 md:px-10"><div className="mx-auto max-w-[1280px] space-y-16">
         <section aria-labelledby="up">
           <h2 id="up" className="label mb-6 text-white">Upcoming events</h2>
@@ -165,6 +166,7 @@ function downloadIcs(e: (typeof events)[number]) {
 export function EventDetail() {
   const { id } = useParams();
   const e = events.find((x) => x.id === id);
+  useMeta({ title: e?.title ?? 'Event not found', description: e?.description });
   if (!e) return <PageHeader eyebrow="Events" title="Event not found" sub="It may have been removed or the link may be wrong."><Breadcrumb items={[{ label: 'Events', to: '/events' }]} /></PageHeader>;
   const past = isPast(e);
   return (
@@ -230,6 +232,7 @@ export function Newsroom() {
 export function Article() {
   const { id } = useParams();
   const n = news.find((x) => x.id === id);
+  useMeta({ title: n?.title ?? 'Story not found', description: n?.content[0] });
   if (!n) return <PageHeader eyebrow="Newsroom" title="Story not found" sub="It may have moved."><Breadcrumb items={[{ label: 'Newsroom', to: '/newsroom' }]} /></PageHeader>;
   const related = news.filter((x) => x.id !== n.id).slice(0, 3);
   return (
@@ -240,7 +243,7 @@ export function Article() {
         </PageHeader>
         <div className="px-5 md:px-10"><div className="mx-auto max-w-3xl">
           {n.image ? <img src={n.image} alt="" className="aspect-[16/9] w-full rounded-2xl object-cover" /> : <Cover category={n.category} title={n.title} className="aspect-[16/9] rounded-2xl" />}
-          <p className="label mt-8 text-mute">By {n.author}</p>
+          <p className="label mt-8 flex items-center gap-3 text-mute"><LogoMark className="h-8 w-8" />By {n.author} · Juris Leadership Alliance</p>
           <div className="mt-8 space-y-6 text-lg leading-relaxed text-white/85">{n.content.map((p, i) => <p key={i}>{p}</p>)}</div>
           <ShareButtons className="mt-12 border-t border-line pt-8" title={n.title} path={`/newsroom/${n.id}`} />
         </div></div>
@@ -249,7 +252,7 @@ export function Article() {
         <h2 className="display mb-10 text-3xl md:text-5xl">Related stories</h2>
         <ul className="grid gap-3 md:grid-cols-3">{related.map((r, i) => <NewsCard key={r.id} n={r} i={i} />)}</ul>
       </Section>
-      <CTASection title="Meet the candidates." actions={[{ label: 'Meet the candidates', to: '/candidates' }, { label: 'Back to newsroom', to: '/newsroom', ghost: true }]} />
+      <CTASection title="Meet the candidates." actions={[{ label: 'Meet the candidates', to: '/candidates' }, { label: 'Read the manifesto', to: '/manifesto', ghost: true }, { label: 'Back to newsroom', to: '/newsroom', ghost: true }]} />
     </>
   );
 }
@@ -258,6 +261,7 @@ export function NotFound() {
   return (
     <PageHeader eyebrow="404" title="Page not found" sub="That page doesn’t exist.">
       <div className="mb-8" />
+      <div className="flex flex-wrap gap-3"><Button href="/">Go home <Arrow /></Button><Button href="/candidates" variant="ghost">Meet the candidates</Button><Button href="/counsels-room" variant="ghost">Counsel’s Room</Button></div>
     </PageHeader>
   );
 }

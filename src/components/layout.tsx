@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router';
 import { campaign, waLink } from '../data/campaign';
+import { Logo, LogoMark } from '../brand';
 import { Arrow } from '../ui';
 import { HaveYourSay, SearchOverlay } from './overlays';
 
@@ -9,6 +10,7 @@ const links: [string, string][] = [
   ['Candidates', '/candidates'],
   ['Vision', '/vision'],
   ['Manifesto', '/manifesto'],
+  ["Counsel’s Room", '/counsels-room'],
   ['Team', '/team'],
   ['Faculty Pulse', '/faculty-pulse'],
   ['Join', '/join'],
@@ -33,17 +35,17 @@ function Nav({ onSearch }: { onSearch: () => void }) {
     <header className={`fixed inset-x-0 top-0 z-40 transition-colors duration-500 ${solid || open ? 'border-b border-line bg-ink/80 backdrop-blur-xl' : ''}`}>
       <nav aria-label="Primary" className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-4 px-5 md:px-10">
         <Link to="/" className="flex shrink-0 items-center gap-3" aria-label="Campaign home">
-          <span className="grid h-8 w-8 place-items-center rounded-full bg-blue font-display text-[13px] font-bold">{campaign.shortName}</span>
+          <LogoMark className="h-9 w-9" />
           <span className="label hidden text-white sm:inline xl:hidden 2xl:inline">{campaign.faculty}</span>
         </Link>
-        <ul className="hidden items-center gap-5 xl:flex">
+        <ul className="hidden items-center gap-4 xl:flex 2xl:gap-5">
           {links.map(([l, h]) => <li key={h}><NavLink to={h} end={h === '/'} className={cls}>{l}</NavLink></li>)}
         </ul>
         <div className="flex items-center gap-2">
           <button onClick={onSearch} aria-label="Search" className="grid h-11 w-11 place-items-center rounded-full hover:bg-white/10">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
           </button>
-          <Link to="/join" className="hidden min-h-10 items-center rounded-full bg-white px-5 text-[12px] font-semibold uppercase tracking-[0.08em] text-ink transition-colors hover:bg-blue-hi sm:inline-flex">Join the movement</Link>
+          <Link to="/join" className="hidden min-h-10 items-center rounded-full bg-white px-5 2xl:inline-flex text-[12px] font-semibold uppercase tracking-[0.08em] text-ink transition-colors hover:bg-blue-hi ">Join the movement</Link>
           <button className="grid h-11 w-11 place-items-center xl:hidden" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen(!open)}>
             <span className="relative block h-3 w-6">
               <span className={`absolute left-0 h-px w-6 bg-white transition-all ${open ? 'top-1.5 rotate-45' : 'top-0'}`} />
@@ -55,7 +57,7 @@ function Nav({ onSearch }: { onSearch: () => void }) {
       {open && (
         <div className="h-[calc(100dvh-4rem)] overflow-y-auto bg-ink px-5 pb-28 pt-4 xl:hidden">
           <ul>
-            {[...links, ['Join the movement', '/join'] as [string, string]].slice(0, 9).map(([l, h]) => (
+            {links.map(([l, h]) => (
               <li key={h} className="border-b border-line">
                 <NavLink to={h} end={h === '/'} className={({ isActive }) => `display flex min-h-14 items-center justify-between text-2xl ${isActive ? 'text-blue-hi' : ''}`}>{l} <Arrow /></NavLink>
               </li>
@@ -75,13 +77,14 @@ function Footer() {
     <footer className="border-t border-line px-5 pb-32 pt-14 md:px-10">
       <div className="mx-auto grid max-w-[1280px] gap-10 md:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
         <div>
-          <div className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-full bg-blue font-display text-sm font-bold">{campaign.shortName}</span><span className="label">{campaign.faculty}</span></div>
-          <p className="mt-6 max-w-xs text-sm text-mute">Independent student campaign website.</p>
+          <Logo className="w-32" />
+          <p className="label mt-5">{campaign.alliance} · {campaign.faculty}</p>
+          <p className="mt-3 max-w-xs text-sm text-mute">Independent student campaign website.</p>
         </div>
         {col('Campaign', [['Candidates', '/candidates'], ['Vision', '/vision'], ['Manifesto', '/manifesto'], ['Team', '/team']])}
-        {col('Engage', [['Faculty Pulse', '/faculty-pulse'], ['Join', '/join'], ['Events', '/events'], ['Newsroom', '/newsroom']])}
+        {col('Engage', [['Counsel’s Room', '/counsels-room'], ['Faculty Pulse', '/faculty-pulse'], ['Join', '/join'], ['Events', '/events'], ['Newsroom', '/newsroom']])}
         <div><p className="label text-mute">Follow</p><ul className="mt-4 space-y-2 text-sm">{campaign.socials.map((s) => <li key={s.label}><a className="ulink" href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a></li>)}</ul></div>
-        <div><p className="label text-mute">Contact</p><ul className="mt-4 space-y-2 text-sm"><li><a className="ulink" href={waLink()} target="_blank" rel="noopener noreferrer">WhatsApp</a></li><li><a className="ulink" href={`mailto:juriscartel@gmail.com${campaign.email}`}>Email</a></li></ul></div>
+        <div><p className="label text-mute">Contact</p><ul className="mt-4 space-y-2 text-sm"><li><a className="ulink" href={waLink()} target="_blank" rel="noopener noreferrer">WhatsApp</a></li><li><a className="ulink" href={`mailto:${campaign.email}`}>Email</a></li></ul></div>
       </div>
       <div className="mx-auto mt-12 max-w-[1280px] space-y-2 text-xs text-mute">
         <p>Campaign content on this site is written by the campaign. Student feedback and Faculty Pulse are unofficial. This site is not an official source of election information.</p>

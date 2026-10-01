@@ -4,6 +4,7 @@ import {
   campaign, eventStart, fetchPoll, fmtDate, previewPoll, waLink,
   type Candidate, type EventItem, type ManifestoItem, type NewsItem, type PollData, type Question, type TeamMember, type VisionPillarT,
 } from '../data/campaign';
+import { Photo } from '../brand';
 import { Arrow, Button, MaskText, Reveal, useCountUp, useInView } from '../ui';
 
 export const Placeholder = ({ children = 'To be supplied by the candidate.' }: { children?: ReactNode }) => (
@@ -123,10 +124,9 @@ export function CandidateCard({ c, i = 0 }: { c: Candidate; i?: number }) {
     <Reveal delay={i * 90}>
       <Link to={`/candidates/${c.id}`} className="group block">
         <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-s2">
-          <img loading="lazy" src={c.photo} alt={`${c.position} candidate (placeholder portrait)`} className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+          <Photo id={c.id} alt={c.imageAlt} focus={c.focus} sizes="(min-width: 768px) 30vw, 90vw" className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
           <span className="label absolute left-4 top-4 rounded-full bg-ink/70 px-3 py-1.5 backdrop-blur">{c.number}</span>
-          {c.placeholderPhoto && <span className="label absolute right-4 top-4 rounded-full bg-ink/70 px-3 py-1.5 text-mute backdrop-blur">Placeholder</span>}
           <div className="absolute inset-x-0 bottom-0 p-5">
             <p className="label text-blue-hi">{c.position}</p>
             <h3 className="display mt-2 text-3xl">{c.name}</h3>

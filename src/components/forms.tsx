@@ -1,10 +1,10 @@
 import { useState, type ReactNode } from 'react';
-import { askCategories, categories, submitToBackend, waLink, type SubmissionKind } from '../data/campaign';
+import { categories, submitToBackend, waLink, type SubmissionKind } from '../data/campaign';
 import { Arrow, Button } from '../ui';
 
-const field = 'mt-2 w-full rounded-xl border border-line bg-s1 px-4 py-3.5 text-base text-white placeholder:text-white/35 focus:border-blue focus:outline-none aria-[invalid=true]:border-red-400';
+export const field = 'mt-2 w-full rounded-xl border border-line bg-s1 px-4 py-3.5 text-base text-white placeholder:text-white/35 focus:border-blue focus:outline-none aria-[invalid=true]:border-red-400';
 
-function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: ReactNode }) {
+export function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: ReactNode }) {
   return (
     <label className="block">
       <span className="label text-mute">{label}</span>
@@ -15,7 +15,7 @@ function Field({ label, hint, error, children }: { label: string; hint?: string;
   );
 }
 
-function Chips({ legend, options, value, onChange, multi }: { legend: string; options: string[]; value: string[]; onChange: (v: string[]) => void; multi?: boolean }) {
+export function Chips({ legend, options, value, onChange, multi }: { legend: string; options: string[]; value: string[]; onChange: (v: string[]) => void; multi?: boolean }) {
   const toggle = (o: string) => onChange(multi ? (value.includes(o) ? value.filter((x) => x !== o) : [...value, o]) : [o]);
   return (
     <fieldset>
@@ -70,7 +70,7 @@ const voiceTypes = ['Question', 'Concern', 'Idea', 'Suggestion', 'Issue'];
 export function FeedbackForm({ variant, panelType }: { variant: FeedbackVariant; panelType?: string }) {
   const { state, delivered, send, reset } = useSubmit(variant);
   const [type, setType] = useState([voiceTypes[1]]);
-  const [cat, setCat] = useState([variant === 'ask' ? askCategories[1] : categories[0]]);
+  const [cat, setCat] = useState([categories[0]]);
   const [name, setName] = useState('');
   const [contact, setContact] = useState('');
   const [msg, setMsg] = useState('');
@@ -97,7 +97,7 @@ export function FeedbackForm({ variant, panelType }: { variant: FeedbackVariant;
   return (
     <form onSubmit={onSubmit} className="space-y-6" noValidate>
       {variant === 'voice' && <Chips legend="What is it?" options={voiceTypes} value={type} onChange={setType} />}
-      {variant !== 'straight' && <Chips legend="Category" options={variant === 'ask' ? askCategories : categories} value={cat} onChange={setCat} />}
+      {variant !== 'straight' && <Chips legend="Category" options={[...categories]} value={cat} onChange={setCat} />}
       {variant === 'straight' ? (
         streetPrompts.map(([k, l]) => (
           <Field key={k} label={l}><textarea rows={3} value={s[k]} onChange={(e) => setS({ ...s, [k]: e.target.value })} className={field} /></Field>
@@ -174,7 +174,7 @@ export function IssueForm() {
   if (state === 'done') return <Confirmation delivered={delivered} waMessage={`Issue (${cat[0]}): ${issue}${msg ? `\n${msg}` : ''}`} onReset={() => { reset(); setIssue(''); setMsg(''); }} />;
   return (
     <form onSubmit={(e) => { e.preventDefault(); send({ category: cat[0], issue, message: msg }); }} className="space-y-6">
-      <Chips legend="Category" options={categories} value={cat} onChange={setCat} />
+      <Chips legend="Category" options={[...categories]} value={cat} onChange={setCat} />
       <Field label="The issue"><input required maxLength={140} value={issue} onChange={(e) => setIssue(e.target.value)} placeholder="e.g. Timetable changes reach students too late" className={field} /></Field>
       <Field label="Message (optional)"><textarea rows={4} value={msg} onChange={(e) => setMsg(e.target.value)} className={field} /></Field>
       <Button type="submit" disabled={state === 'sending'}>{state === 'sending' ? 'Sending…' : 'Submit issue'} <Arrow /></Button>

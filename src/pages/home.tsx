@@ -1,6 +1,8 @@
 import { Link } from 'react-router';
 import { campaign, candidates, events, isPast, manifesto, news, pillars, team, waLink } from '../data/campaign';
 import { CandidateCard, Empty, EventCard, ManifestoCard, NewsCard, PollChart, TeamMemberCard, usePoll } from '../components/kit';
+import { Logo, Photo } from '../brand';
+import { useBoard, BoardCard } from './counsel';
 import { openSay } from '../components/overlays';
 import { Arrow, Button, MaskText, Reveal, Section } from '../ui';
 
@@ -20,18 +22,23 @@ function Head({ eyebrow, title, to, cta, sub }: { eyebrow: string; title: string
 function Hero() {
   return (
     <section className="relative flex min-h-[100svh] items-end overflow-hidden px-5 pb-24 pt-28 md:px-10 md:pb-20">
-      <img src={candidates[0].photo} alt="" className="absolute inset-0 h-full w-full object-cover object-[70%_20%] opacity-60 md:object-[80%_15%]" />
+      <div className="absolute inset-y-0 right-0 w-full md:w-3/5" aria-hidden="true"><Photo id="president" alt="" eager sizes="60vw" focus="50% 18%" className="h-full w-full object-cover opacity-55" /></div>
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
       <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/60 to-transparent" />
       <div className="relative mx-auto w-full max-w-[1280px]">
-        <Reveal><p className="label text-blue-hi">{campaign.faculty} · Leadership team</p></Reveal>
-        <h1 className="display mt-5 text-[clamp(3.2rem,12vw,10.5rem)]"><MaskText text="The faculty we deserve." /></h1>
+        <Reveal>
+          <div className="flex items-center gap-5">
+            <Logo eager className="w-24 md:w-32" />
+            <div><p className="display text-xl md:text-3xl">{campaign.alliance}</p><p className="label mt-2 text-blue-hi">{campaign.faculty} · Leadership team</p></div>
+          </div>
+        </Reveal>
+        <h1 className="display mt-10 text-[clamp(3.2rem,12vw,10.5rem)]"><MaskText text="The faculty we deserve." /></h1>
         <Reveal delay={300}>
           <p className="mt-8 font-display text-2xl font-semibold leading-tight tracking-tight md:text-4xl">Leadership with purpose.<br />Representation with results.</p>
           <p className="mt-6 max-w-lg text-base leading-relaxed text-white/70 md:text-lg">Three candidates, one practical agenda: a Faculty of Law that communicates clearly, supports students early and reports back on every promise.</p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Button href="/vision">Explore the vision <Arrow /></Button>
-            <Button href="/candidates" variant="ghost">Meet the candidates <Arrow /></Button>
+            <Button href="/candidates">Meet the candidates <Arrow /></Button>
+            <Button href="/vision" variant="ghost">Explore the vision <Arrow /></Button>
           </div>
         </Reveal>
       </div>
@@ -52,6 +59,33 @@ function Positioning() {
   );
 }
 
+function CounselPreview() {
+  const board = useBoard();
+  const cards = (board ?? []).slice(0, 3);
+  return (
+    <Section id="counsels-room">
+      <div className="rounded-3xl border border-line bg-s1 p-8 md:p-16">
+        <div className="grid gap-10 lg:grid-cols-2">
+          <div>
+            <Reveal><p className="label text-blue-hi">Student voice</p></Reveal>
+            <h2 className="display mt-5 text-[clamp(2.4rem,6vw,5rem)]"><MaskText text="The Counsel’s Room" /></h2>
+            <Reveal delay={150}><p className="mt-6 max-w-md text-lg text-mute">Questions. Concerns. Ideas. Say what you think.</p></Reveal>
+          </div>
+          <Reveal className="flex flex-col justify-end gap-3">
+            <Button href="/counsels-room">Enter the Counsel’s Room <Arrow /></Button>
+            <Button onClick={openSay} variant="ghost">Have your say <Arrow /></Button>
+          </Reveal>
+        </div>
+        {cards.length ? (
+          <ul className="mt-12 grid gap-3 md:grid-cols-3">{cards.map((c) => <li key={c.id}><BoardCard s={c} /></li>)}</ul>
+        ) : (
+          <p className="display mt-12 border-t border-line pt-8 text-2xl text-white/80 md:text-3xl">Be the first to open the floor.</p>
+        )}
+      </div>
+    </Section>
+  );
+}
+
 export default function Home() {
   const poll = usePoll();
   const upcoming = events.filter((e) => !isPast(e)).slice(0, 3);
@@ -61,7 +95,7 @@ export default function Home() {
       <Positioning />
 
       <Section id="candidates">
-        <Head eyebrow="The candidates" title="The people behind the vision" to="/candidates" cta="Meet the team" />
+        <Head eyebrow="The candidates" title="The people behind the vision" to="/candidates" cta="Meet the candidates" />
         <div className="grid gap-8 md:grid-cols-3">{candidates.map((c, i) => <CandidateCard key={c.id} c={c} i={i} />)}</div>
       </Section>
 
@@ -120,20 +154,7 @@ export default function Home() {
         {news.length ? <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">{news.slice(0, 4).map((n, i) => <NewsCard key={n.id} n={n} i={i} />)}</ul> : <Empty title="Campaign updates are on the way." text="Stories will appear here." />}
       </Section>
 
-      <Section id="voice">
-        <div className="grid gap-10 rounded-3xl border border-line bg-s1 p-8 md:p-16 lg:grid-cols-2">
-          <div>
-            <Reveal><p className="label text-blue-hi">Student voice</p></Reveal>
-            <h2 className="display mt-5 text-[clamp(2.4rem,6vw,5rem)]"><MaskText text="Your voice matters." /></h2>
-            <Reveal delay={150}><p className="mt-6 max-w-md text-lg text-mute">Ask a question, share an idea, report an issue or tell us straight what’s going on. Every message is read.</p></Reveal>
-          </div>
-          <Reveal className="flex flex-col justify-end gap-3">
-            <Button onClick={openSay}>Have your say <Arrow /></Button>
-            <Button href="/faculty-pulse#ask" variant="ghost">Ask the campaign <Arrow /></Button>
-            <Button href="/faculty-pulse#straight" variant="ghost">Say it straight <Arrow /></Button>
-          </Reveal>
-        </div>
-      </Section>
+      <CounselPreview />
 
       <section className="relative overflow-hidden border-t border-line px-5 py-32 md:px-10 md:py-52">
         <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 h-[60vw] w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue/25 blur-[120px]" style={{ animation: 'drift 18s ease-in-out infinite' }} />

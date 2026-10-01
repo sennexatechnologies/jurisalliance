@@ -1,11 +1,13 @@
 // Content + data-access layer. Every export here is replaceable by a CMS / API call.
+import { photoSets } from '../assets';
 
 export const API_URL: string | undefined = (import.meta as any).env?.VITE_API_URL;
 
 export const campaign = {
-  shortName: 'JP',
+  shortName: 'JLA',
+  alliance: 'Juris Leadership Alliance',
   faculty: 'CUEA Faculty of Law',
-  whatsapp: '+254753926295', // replace with campaign number (international format, no +)
+  whatsapp: '+254753926295', // international format
   email: 'juriscartels@gmail.com',
   socials: [
     { label: 'Instagram', href: 'https://www.instagram.com/juris_cartels?igsh=bW02amxwNW5va3p1' },
@@ -17,7 +19,7 @@ export const campaign = {
 };
 
 export const waLink = (message = 'Hello, I’d like to connect and get involved with the campaign.') =>
-  `https://wa.me/${campaign.whatsapp}?text=${encodeURIComponent(message)}`;
+  `https://wa.me/${campaign.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
 
 // ---------- Candidates ----------
 export type Candidate = {
@@ -25,51 +27,47 @@ export type Candidate = {
   number: string;
   position: string;
   name: string;
-  photo: string;
-  placeholderPhoto: boolean;
+  image: string; // 1024w source for the photo; use <Photo id=...> for responsive output
+  imageAlt: string;
+  focus: string; // object-position that keeps the face in frame when cropped
   officeRole: string; // one-line description of the office (not a claim about the person)
   officeText: string;
-  intro: string | null;
+  intro: string | null; // short bio
   story: { who: string | null; why: string | null; philosophy: string | null; stand: string | null; commitment: string | null };
   experience: string[];
   achievements: string[];
   academic: string | null;
   values: string[];
   quote: string | null;
+  statement: string | null;
   priorities: string[]; // manifesto ids: placeholder allocation
 };
 
-const img = (id: string) => `https://images.unsplash.com/photo-${id}?w=1200&h=1500&fit=crop&auto=format`;
+const empty = { who: null, why: null, philosophy: null, stand: null, commitment: null };
 
 export const candidates: Candidate[] = [
   {
-    id: 'president', number: '01', position: 'President', name: 'John Otieno "JOHNTE"', placeholderPhoto: true,
-    photo: img(''),
+    id: 'president', number: '01', position: 'President', name: 'John Otieno "JOHNTE"',
+    image: photoSets.president[1024], imageAlt: 'John Otieno, candidate for President', focus: '50% 18%',
     officeRole: 'Overall leadership',
     officeText: 'Sets the direction, chairs the leadership team and answers for the campaign’s commitments.',
-    intro: null,
-    story: { who: null, why: null, philosophy: null, stand: null, commitment: null },
-    experience: [], achievements: [], academic: null, quote: null,
+    intro: null, story: empty, experience: [], achievements: [], academic: null, quote: null, statement: null,
     values: campaign.values, priorities: ['accountability', 'representation', 'community'],
   },
   {
-    id: 'vice-president', number: '02', position: 'Vice President', name: 'Tuvia Anne', placeholderPhoto: true,
-    photo: img(''),
+    id: 'vice-president', number: '02', position: 'Vice President', name: 'Tuvia Anne',
+    image: photoSets['vice-president'][1024], imageAlt: 'Tuvia Anne, candidate for Vice President', focus: '50% 32%',
     officeRole: 'Coordination & representation',
     officeText: 'Keeps the team’s work joined up and carries student concerns from every year group to the table.',
-    intro: null,
-    story: { who: null, why: null, philosophy: null, stand: null, commitment: null },
-    experience: [], achievements: [], academic: null, quote: null,
+    intro: null, story: empty, experience: [], achievements: [], academic: null, quote: null, statement: null,
     values: campaign.values, priorities: ['communication', 'welfare', 'student-life'],
   },
   {
-    id: 'secretary-academic-affairs', number: '03', position: 'Secretary of Academic Affairs', name: 'Nkatha Thaitanga', placeholderPhoto: true,
-    photo: img(''),
+    id: 'secretary-academic-affairs', number: '03', position: 'Secretary of Academic Affairs', name: 'Nkatha Thaitanga',
+    image: photoSets['secretary-academic-affairs'][1024], imageAlt: 'Nkatha Thaiting"a, candidate for Secretary of Academic Affairs', focus: '50% 24%',
     officeRole: 'Academic advocacy',
     officeText: 'Speaks for students on teaching, assessment, learning resources and academic processes.',
-    intro: null,
-    story: { who: null, why: null, philosophy: null, stand: null, commitment: null },
-    experience: [], achievements: [], academic: null, quote: null,
+    intro: null, story: empty, experience: [], achievements: [], academic: null, quote: null, statement: null,
     values: campaign.values, priorities: ['academics', 'career', 'digital'],
   },
 ];
@@ -83,7 +81,7 @@ export const storySections: [keyof Candidate['story'], string][] = [
 ];
 
 // ---------- Manifesto ----------
-export const manifestoFilters = ['Academics', 'Welfare', 'Career', 'Representation', 'Communication', 'Facilities', 'Student life'] as const;
+export const manifestoFilters = ['Academics', 'Student welfare', 'Career', 'Representation', 'Communication', 'Facilities', 'Student life'] as const;
 export type ManifestoItem = {
   id: string; n: string; category: (typeof manifestoFilters)[number]; title: string; tagline: string;
   issue: string; proposal: string; how: string[]; serves: string; measure: string; status: 'proposed' | 'in-progress' | 'delivered';
@@ -95,7 +93,7 @@ export const manifesto: ManifestoItem[] = [
     proposal: 'A Faculty academic support calendar: peer-led revision clinics, a moderated resource bank and published lecturer consultation slots.',
     how: ['Year representatives run revision clinics before every assessment period', 'A shared resource bank organised by unit and moderated for quality', 'Consultation windows agreed with lecturers and published at the start of semester'],
     serves: 'Every student, with a particular focus on first- and second-years.', measure: 'Clinic attendance, resource bank use and a short semester-end student survey.' },
-  { id: 'welfare', n: '02', category: 'Welfare', title: 'Student Welfare', tagline: 'A clear route from a problem to a person who can solve it.', status: 'proposed',
+  { id: 'welfare', n: '02', category: 'Student welfare', title: 'Student Welfare', tagline: 'A clear route from a problem to a person who can solve it.', status: 'proposed',
     issue: 'Students facing financial, health or personal difficulty often don’t know who to approach, so they say nothing.',
     proposal: 'A one-page welfare referral map and a confidential first-contact point that connects students to services the university already provides.',
     how: ['Publish who handles what, and where to find them', 'Name a welfare contact on the Faculty leadership team', 'Accept confidential referrals in person or on WhatsApp'],
@@ -187,7 +185,7 @@ export const team: TeamMember[] = teamGroups.flatMap((g, gi) =>
 );
 
 // ---------- Events ----------
-export type EventItem = { id: string; title: string; date: string; time: string; endTime?: string; location: string; description: string; agenda?: string[]; speakers?: string[] };
+export type EventItem = { id: string; title: string; date: string; time: string; endTime?: string; location: string; description: string; agenda?: string[]; speakers?: string[]; status?: 'scheduled' | 'cancelled' | 'completed' };
 export const events: EventItem[] = []; // date = YYYY-MM-DD, time = HH:mm
 
 export const eventStart = (e: EventItem) => new Date(`${e.date}T${e.time || '00:00'}`);
@@ -196,7 +194,7 @@ export const isPast = (e: EventItem) => eventEnd(e).getTime() < Date.now();
 export const fmtDate = (d: string | Date) => new Date(d).toLocaleDateString('en-KE', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
 // ---------- News ----------
-export type NewsItem = { id: string; title: string; category: string; date: string | null; image?: string; excerpt: string; content: string[]; author: string };
+export type NewsItem = { id: string; title: string; category: string; date: string | null; image?: string; excerpt: string; content: string[]; author: string; status?: 'published' | 'draft' };
 export const newsCategories = ['Campaign', 'Manifesto', 'Events', 'Announcements', 'Student voice', 'Media'];
 export const news: NewsItem[] = [
   { id: 'campaign-headquarters-goes-digital', category: 'Campaign', date: null, author: 'The campaign', title: 'Campaign headquarters goes digital',
@@ -246,7 +244,7 @@ export const endorsements: Endorsement[] = []; // omitted until verified, permis
 // ---------- Poll ----------
 export type PollOption = { candidateName: string; votes: number; percentage: number; lastUpdated: string };
 export type PollData = { options: PollOption[]; totalResponses: number; lastUpdated: string; status: 'open' | 'closed' | 'pending'; live: boolean; preview?: boolean };
-export type Trend = { category: string; count: number };
+export type PulseTopic = { category: string; count: number; percentage: number; lastUpdated: string };
 
 export async function fetchPoll(): Promise<PollData | null> {
   if (!API_URL) return null;
@@ -255,7 +253,8 @@ export async function fetchPoll(): Promise<PollData | null> {
     return r.ok ? { ...(await r.json()), live: true } : null;
   } catch { return null; }
 }
-export async function fetchTrends(): Promise<Trend[] | null> {
+// Aggregated, anonymised topic counts from reviewed Counsel's Room submissions. Returns null until a backend provides them.
+export async function fetchPulseTopics(): Promise<PulseTopic[] | null> {
   if (!API_URL) return null;
   try {
     const r = await fetch(`${API_URL}/trends`);
@@ -280,8 +279,111 @@ export async function submitToBackend(kind: SubmissionKind, payload: Record<stri
   return { delivered: false };
 }
 
-export const categories = ['Academics', 'Welfare', 'Communication', 'Facilities', 'Career', 'Student life', 'Other'];
-export const askCategories = ['Candidates', 'Manifesto', 'Academics', 'Student welfare', 'Campaign', 'Other'];
+// One category list for Counsel's Room, Faculty Pulse, search, analytics and the admin dashboard.
+export const issueCategories = ['Academics', 'Student welfare', 'Communication', 'Facilities', 'Career', 'Student life', 'Representation', 'Other'] as const;
+export type IssueCategory = (typeof issueCategories)[number];
+export const categories: readonly string[] = issueCategories;
+export const askCategories: readonly string[] = issueCategories;
+
+// ---------- Counsel's Room ----------
+export type CounselMode = 'ask' | 'rant' | 'suggest' | 'issue';
+export type CounselStatus = 'received' | 'under-review' | 'responded' | 'resolved' | 'closed';
+export type ModerationStatus = 'pending' | 'approved' | 'rejected' | 'hidden' | 'archived';
+export type ModerationFlag = 'harassment' | 'personal-information' | 'threat' | 'unverified-allegation' | 'spam' | 'other';
+
+export const statusLabel: Record<CounselStatus, string> = { received: 'Received', 'under-review': 'Under review', responded: 'Responded', resolved: 'Resolved', closed: 'Closed' };
+
+export type CounselSubmission = {
+  id: string;
+  reference: string; // e.g. JLA-7F42. Random, carries no personal information.
+  mode: CounselMode;
+  category: IssueCategory;
+  message: string;
+  anonymous: boolean;
+  createdAt: string;
+  status: CounselStatus;
+  moderationStatus: ModerationStatus; // the public board only ever shows 'approved'
+  response: string | null;
+  respondedAt: string | null;
+};
+
+// Contract for the future admin dashboard (never rendered publicly):
+//   POST   /admin/counsel/:id/moderation  { action: 'approve'|'reject'|'hide'|'archive'|'flag', flag?: ModerationFlag }
+//   POST   /admin/counsel/:id/response    { response: string }
+//   PATCH  /admin/counsel/:id/status      { status: CounselStatus }
+export const moderationActions = ['approve', 'reject', 'hide', 'archive', 'respond', 'change-status', 'flag'] as const;
+export const moderationFlags: ModerationFlag[] = ['harassment', 'personal-information', 'threat', 'unverified-allegation', 'spam', 'other'];
+
+export const counselModes: { id: CounselMode; verb: string; title: string; blurb: string }[] = [
+  { id: 'ask', verb: 'Ask', title: 'Ask the campaign', blurb: 'Have a question? Put it on the record.' },
+  { id: 'rant', verb: 'Rant', title: 'Rant', blurb: 'Say what’s on your mind. Plainly.' },
+  { id: 'suggest', verb: 'Suggest', title: 'Share an idea', blurb: 'What could make student life better?' },
+  { id: 'issue', verb: 'Raise an issue', title: 'Raise an issue', blurb: 'Something broken that needs attention.' },
+];
+
+const REF_CHARS = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+export function newReference(): string {
+  const b = crypto.getRandomValues(new Uint8Array(4));
+  return `JLA-${Array.from(b, (n) => REF_CHARS[n % REF_CHARS.length]).join('')}`;
+}
+
+export type CounselInput = {
+  mode: CounselMode;
+  category: IssueCategory;
+  message: string;
+  context?: string;
+  responseFormat?: string;
+  anonymous: boolean;
+  publicOk?: boolean; // permission to show on the moderated board
+  contact?: string; // only ever set when anonymous === false
+};
+
+// Anonymous submissions never include name or contact fields. Nothing is stored in the browser.
+export async function submitCounsel(input: CounselInput): Promise<{ delivered: boolean; reference: string }> {
+  const reference = newReference();
+  if (API_URL) {
+    const body: Record<string, unknown> = { reference, mode: input.mode, category: input.category, message: input.message, anonymous: input.anonymous, publicOk: !!input.publicOk };
+    if (input.context) body.context = input.context;
+    if (input.responseFormat) body.responseFormat = input.responseFormat;
+    if (!input.anonymous && input.contact) body.contact = input.contact;
+    try {
+      const r = await fetch(`${API_URL}/counsel`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'omit', body: JSON.stringify(body) });
+      if (r.ok) {
+        const j = await r.json().catch(() => ({}));
+        return { delivered: true, reference: typeof j.reference === 'string' ? j.reference : reference };
+      }
+    } catch { /* fall through */ }
+  }
+  return { delivered: false, reference };
+}
+
+// Public board: the server should only return approved items; the client filters again defensively.
+export async function fetchBoard(): Promise<CounselSubmission[] | null> {
+  if (!API_URL) return null;
+  try {
+    const r = await fetch(`${API_URL}/counsel/board`, { credentials: 'omit' });
+    if (!r.ok) return null;
+    const list: CounselSubmission[] = await r.json();
+    return list.filter((x) => x.moderationStatus === 'approved');
+  } catch { return null; }
+}
+
+export async function fetchStatus(reference: string): Promise<{ status: CounselStatus; response: string | null } | 'unavailable' | null> {
+  if (!API_URL) return 'unavailable';
+  try {
+    const r = await fetch(`${API_URL}/counsel/status/${encodeURIComponent(reference.trim().toUpperCase())}`, { credentials: 'omit' });
+    return r.ok ? await r.json() : null;
+  } catch { return 'unavailable'; }
+}
+
+// "Is this an issue you care about?" Aggregated server-side; no identity is sent.
+export async function sendSignal(reference: string, value: 'yes' | 'not-sure'): Promise<boolean> {
+  if (!API_URL) return false;
+  try {
+    const r = await fetch(`${API_URL}/counsel/${encodeURIComponent(reference)}/signal`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'omit', body: JSON.stringify({ value }) });
+    return r.ok;
+  } catch { return false; }
+}
 
 // ---------- Search index ----------
 export type SearchHit = { type: string; title: string; text: string; to: string };
@@ -292,6 +394,8 @@ export function buildIndex(): SearchHit[] {
     ...pillars.map((p) => ({ type: 'Vision', title: p.title, text: `${p.problem} ${p.vision} ${p.objective} ${p.approach}`, to: `/vision#${p.id}` })),
     ...news.map((n) => ({ type: 'Newsroom', title: n.title, text: `${n.category} ${n.excerpt} ${n.content.join(' ')}`, to: `/newsroom/${n.id}` })),
     ...events.map((e) => ({ type: 'Event', title: e.title, text: `${e.location} ${e.description}`, to: `/events/${e.id}` })),
+    ...counselModes.map((m) => ({ type: "Counsel's Room", title: m.title, text: m.blurb, to: `/counsels-room?mode=${m.id}` })),
+    ...issueCategories.map((c) => ({ type: 'Category', title: c, text: `Questions, issues and ideas about ${c.toLowerCase()}`, to: `/counsels-room?category=${encodeURIComponent(c)}#board` })),
     ...questions.map((q) => ({ type: 'FAQ', title: q.question, text: `${q.category} ${q.answer ?? ''}`, to: `/faculty-pulse#questions` })),
   ];
 }
