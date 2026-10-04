@@ -62,7 +62,7 @@ export const candidates: Candidate[] = [
     officeRole: 'Coordination & representation',
     officeText: 'Keeps the team’s work joined up and carries student concerns from every year group to the table.',
     intro: "I'm Tuvia Anne, a dedicated student leader committed to enhancing student life and welfare.", 
-    story: { who: "I am Anne Tuvia, a student leader committed to service, advocacy and creating opportunities for others. My leadership has been shaped by the people who have supported and mentoredme - my family, teachers, peers and friends. Their influence taught me a simple principle: Be the change you want to see. Today, I serve as Head of Moot Training, Legal Policy Coordinator at LAJI, Head of Oral Advocacy at CUEA Law Firm, Deputy Head of the International Court of Justice at Kenya Model UJ, and Vice Chair of Juris Organization, among other leadership roles.", why: "I'm running for Law School Vice President because I believe my  experiences have equipped me to contribute meaningfully to better student service, stronger opprtunities and a better experience for every law student. I have experienced leadership from different angles - advocacy, training, policy, student organisations and professional development - and I want to bring that experience directly into student leadership.", philosophy: "I believe leadership is about service, collaboration and empowerment. A leader's role is to create an environment where every student feels heard, valued and capable of contributing to the community. I aim to foster a culture of inclusivity, transparency and accountability.", stand: "I stand for student welfare, effective communication and a vibrant student life. I am committed to ensuring that every student's voice is represented in decision-making processes and that their concerns are addressed promptly and effectively.", commitment: "I commit to being a proactive, approachable and responsive Vice President. I will work tirelessly to ensure that our student body thrives academically, socially and personally." },
+    story: { who: "I am Anne Tuvia, a student leader committed to service, advocacy and creating opportunities for others. My leadership has been shaped by the people who have supported and mentored me - my family, teachers, peers and friends. Their influence taught me a simple principle: Be the change you want to see. Today, I serve as Head of Moot Training, Legal Policy Coordinator at LAJI, Head of Oral Advocacy at CUEA Law Firm, Deputy Head of the International Court of Justice at Kenya Model UJ, and Vice Chair of Juris Organization, among other leadership roles.", why: "I'm running for Law School Vice President because I believe my  experiences have equipped me to contribute meaningfully to better student service, stronger opprtunities and a better experience for every law student. I have experienced leadership from different angles - advocacy, training, policy, student organisations and professional development - and I want to bring that experience directly into student leadership.", philosophy: "I believe leadership is about service, collaboration and empowerment. A leader's role is to create an environment where every student feels heard, valued and capable of contributing to the community. I aim to foster a culture of inclusivity, transparency and accountability.", stand: "I stand for student welfare, effective communication and a vibrant student life. I am committed to ensuring that every student's voice is represented in decision-making processes and that their concerns are addressed promptly and effectively.", commitment: "I commit to being a proactive, approachable and responsive Vice President. I will work tirelessly to ensure that our student body thrives academically, socially and personally." },
     experience: [ 'Head of Moot Training', 'Head of Oral Advocacy - CUEA  Law Firm', 'Legal Policy Coordinator - LAJI', 'Deputy Head of the International Court of Justice - Kenya Model UN', 'Vice Chair - Juris Organization' ], achievements: [], academic: null, quote: null, statement: "Leadership that serves. Opportunities that reach everyone.",
     values: campaign.values, priorities: ['put-cuea-fol-on-the-map', 'student-dignity-welfare', 'sports-culture-social-life'],
   },
@@ -88,7 +88,22 @@ export const storySections: [keyof Candidate['story'], string][] = [
 
 // ---------- Manifesto ----------
 // Chapters (the former "filters") in reading order. Every commitment belongs to exactly one.
-export const manifestoFilters = ['Academics', 'Student welfare', 'Career', 'Student life', 'Representation', 'Communication'] as const;
+export const manifestoFilters = [
+  'Academics',
+  'Student welfare',
+  'Career',
+  'Student life',
+  'Representation',
+  'Communication',
+  'Mental Health',
+  'Academic Resources',
+  'Student Welfare',
+  'Student Life',
+  'Partnerships',
+  'Entrepreneurship',
+  'Community',
+  'Practical Legal Education',
+] as const;
 export type ManifestoCategory = (typeof manifestoFilters)[number];
 
 // Approved chapter introductions. Intentionally empty: none have been supplied by the committee yet.
@@ -150,7 +165,279 @@ const manifestoAll: ManifestoItem[] = [
     how: [] },
   { id: 'put-cuea-fol-on-the-map', aliases: ['communication', 'community'], n: '09', category: 'Communication', title: 'Put CUEA FOL on the Map', pdfSection: 10, status: 'proposed', publication: 'PUBLISHED',
     how: ['An effective media team that tells the story of CUEA law students and gives updates on ongoing events.', 'Inter law-school events. Sports tournaments with other law schools, hosting debates and moots.'] },
-];
+    {
+    id: 'mental-health-peer-support', aliases: ['mental health', 'peer counselling', 'counselling'],
+    n: '10',
+    category: 'Mental Health',
+    title: 'Mental Health & Peer Support',
+    pdfSection: 11,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'Law school should be a place where students can pursue excellence without having to carry their struggles alone. We will advocate for accessible mental-health support and peer-based counselling within the Faculty.',
+
+    how: [
+      'Establish a school mental-health hotline that students can reach out to when they need support.',
+      'Establish law school peer counselling representatives in every cohort to provide an accessible first point of contact.'
+    ],
+
+    impact:
+      'Students will have clearer and more accessible channels for seeking support, while building a culture where mental health can be discussed without stigma.'
+  },
+
+  {
+    id: 'library-e-library-access',
+    aliases: ['library', 'e-library', 'library access'],
+    n: '11',
+    category: 'Academic Resources',
+    title: 'Library & E-Library Access',
+    pdfSection: 12,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'We will liaise with the main library to ensure that Law School students have access to the e-library resources they need for research and learning.',
+
+    how: [
+      'Liaise with the main library to improve and facilitate e-library access for Law School students.',
+      'Engage the administration on the ongoing construction of the cafeteria and library near the Law School.'
+    ],
+
+    impact:
+      'Better access to physical and digital library resources will strengthen legal research, independent study and academic preparation.'
+  },
+
+  {
+    id: 'student-friendly-law-school',
+    aliases: ['hate speech', 'student friendly environment', 'student dignity'],
+    n: '12',
+    category: 'Student Welfare',
+    title: 'A Student-Friendly Law School',
+    pdfSection: 13,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'We will advocate for a Law School policy against any form of hate speech in order to foster a student-friendly, respectful and nurturing environment.',
+
+    how: [
+      'Engage the relevant Faculty and University structures on the development and implementation of an appropriate policy against hate speech.',
+      'Promote a culture of dignity, respect and responsible engagement among students.'
+    ],
+
+    impact:
+      'A safer and more respectful environment where students can learn, participate and express themselves without fear of discrimination or hate.'
+  },
+
+  {
+    id: 'better-wifi-connectivity',
+    aliases: ['wifi', 'internet', 'connectivity'],
+    n: '13',
+    category: 'Academic Resources',
+    title: 'Better Wi-Fi, Better Learning',
+    pdfSection: 14,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'Reliable connectivity is essential for modern legal education. We will liaise with the administration to purchase Wi-Fi extenders for each floor of the Law School to increase coverage and connectivity.',
+
+    how: [
+      'Liaise with the administration on the purchase and installation of Wi-Fi extenders.',
+      'Advocate for improved connectivity across all Law School floors.'
+    ],
+
+    impact:
+      'Stronger connectivity will support online research, e-learning, digital resources, communication and everyday student work.'
+  },
+
+  {
+    id: 'career-week',
+    aliases: ['career week', 'law firms', 'mentorship', 'professional exposure'],
+    n: '14',
+    category: 'Career',
+    title: 'Career Week & Professional Exposure',
+    pdfSection: 15,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'We will create a dedicated Career Week that brings law firms and relevant organizations closer to students through mentorship, professional engagement and opportunity sharing.',
+
+    how: [
+      'Invite law firms and relevant organizations to engage students during Career Week.',
+      'Create opportunities for mentorship, professional conversations and exposure to career pathways.'
+    ],
+
+    impact:
+      'Students gain earlier exposure to the profession, stronger professional networks and clearer pathways toward internships and future opportunities.'
+  },
+
+  {
+    id: 'clubs-and-societies',
+    aliases: ['clubs', 'societies', 'club participation'],
+    n: '15',
+    category: 'Student Life',
+    title: 'Stronger Clubs & Societies',
+    pdfSection: 16,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'Clubs and societies are an important part of student development. We will work with existing clubs and societies to strengthen active membership and participation.',
+
+    how: [
+      'Liaise with clubs and societies to encourage active student membership.',
+      'Hold bi-weekly meetings with Law School club heads.',
+      'Advocate for certificates to be issued for active club participation.'
+    ],
+
+    impact:
+      'Students gain more opportunities for leadership, networking, practical skills and recognition of their extracurricular contributions.'
+  },
+
+  {
+    id: 'law-school-partnerships-office',
+    aliases: ['partnerships', 'partnerships office', 'opportunity partnerships'],
+    n: '16',
+    category: 'Partnerships',
+    title: 'A Law School Partnerships Office',
+    pdfSection: 17,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'We will establish a Law School Partnerships Office focused on negotiating meaningful opportunities with law firms, organizations and development partners.',
+
+    how: [
+      'Build on scholarship opportunities with UNICAF.',
+      'Build on fellowship opportunities with SAYDS.',
+      'Build on community outreach opportunities with Rebirth of a Queen and Little Box Foundation.',
+      'Negotiate meaningful partnerships with law firms and organizations for internship opportunities.',
+      'Pursue partnerships for Law School event sponsorships, moot court support for moots outside Africa, awards and collaborations.'
+    ],
+
+    impact:
+      'A structured partnerships function can turn external relationships into practical opportunities for students.'
+  },
+
+  {
+    id: 'student-entrepreneurship',
+    aliases: ['entrepreneurship', 'entrepreneurs', 'student businesses'],
+    n: '17',
+    category: 'Entrepreneurship',
+    title: 'Law Students Who Build',
+    pdfSection: 18,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'We will continue the previous regime’s entrepreneurship programme while expanding opportunities for Law School students to showcase, market and grow their businesses.',
+
+    how: [
+      'Ensure entrepreneurs’ tents are available during major CUEA events.',
+      'Develop an entrepreneurship online site in collaboration with ODOO.',
+      'Establish an Entrepreneurship Week where Law School students can advertise their businesses and invite other students to engage with them.'
+    ],
+
+    impact:
+      'Law students gain a platform to build businesses, connect with customers and develop entrepreneurial skills alongside their legal education.'
+  },
+
+  {
+    id: 'law-school-canteen',
+    aliases: ['canteen', 'student services', 'printing services'],
+    n: '18',
+    category: 'Student Welfare',
+    title: 'A Reliable Law School Canteen',
+    pdfSection: 19,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'Although the Law School canteen has previously been worked on, its seasonal operation limits access to essential student services. We commit to advocating for its consistent availability.',
+
+    how: [
+      'Engage the relevant administration on keeping the Law School canteen operational.',
+      'Advocate for convenient access to services such as printing and essential academic materials.'
+    ],
+
+    impact:
+      'Students can access everyday academic and convenience services without unnecessary disruption.'
+  },
+
+  {
+    id: 'better-social-amenities',
+    aliases: ['social amenities', 'pad drives', 'toiletries', 'mirrors'],
+    n: '19',
+    category: 'Student Welfare',
+    title: 'Better Social Amenities',
+    pdfSection: 20,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'Student welfare includes the everyday amenities that make campus life more dignified and comfortable.',
+
+    how: [
+      'Organise pad drives within the Law School.',
+      'Advocate for access to essential toiletries.',
+      'Where possible, advocate for mirrors to be installed on all floors.'
+    ],
+
+    impact:
+      'Small but meaningful improvements to everyday student welfare and dignity.'
+  },
+
+  {
+    id: 'legal-aid-beyond-classroom',
+    aliases: ['legal aid', 'justice defenders', 'practical legal education'],
+    n: '20',
+    category: 'Practical Legal Education',
+    title: 'Legal Aid Beyond the Classroom',
+    pdfSection: 21,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'Legal education should extend beyond the classroom. We commit to supporting practical legal aid opportunities that allow students to understand how law operates in real communities.',
+
+    how: [
+      'Hold at least one Law School legal aid initiative every semester.',
+      'Support club-led legal aid activities in partnership with Justice Defenders.',
+      'Use these opportunities to expose students to the practical operation of criminal law beyond the classroom.'
+    ],
+
+    impact:
+      'Students gain practical exposure to legal work while communities benefit from meaningful legal aid initiatives.'
+  },
+
+  {
+    id: 'corporate-social-responsibility',
+    aliases: ['csr', 'community service', 'community outreach'],
+    n: '21',
+    category: 'Community',
+    title: 'Corporate Social Responsibility',
+    pdfSection: 22,
+    status: 'proposed',
+    publication: 'PUBLISHED',
+
+    proposal:
+      'Our leadership will ensure that the Law School is more actively involved in serving the wider community. We shall nurture not only our minds, but also our hearts.',
+
+    how: [
+      'Participate in community support initiatives every semester.',
+      'Organise environmental clean-up activities.',
+      'Make donations to homes every semester.'
+    ],
+
+    impact:
+      'A Law School leadership that contributes beyond campus and develops students who understand that leadership also means service.'
+  }, 
+
+
+  ];
 
 // Only approved, published content reaches the site.
 export const manifesto: ManifestoItem[] = manifestoAll.filter((m) => m.publication === 'PUBLISHED');
