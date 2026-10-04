@@ -1,0 +1,10 @@
+{
+  "description": "Engage and inform community members through a dynamic platform that showcases activities, stories, and a revitalized manifesto for the Juris Leadership Alliance.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
